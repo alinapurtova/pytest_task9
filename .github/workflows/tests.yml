@@ -1,0 +1,66 @@
+name: Run Pytest Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pipenv
+          pipenv install --dev
+          pipenv run playwright install
+
+      - name: Run tests with pytest
+        if: always()
+        run: |
+          pipenv run pytest --browser_name=${{ matrix.browser }} --alluredir=allure-results
+
+      - name: Generate Allure Report
+        if: always()
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          allure_report: allure-report
+          allure_history: allure-history
+
+      - name: Deploy report to gh-pages-report branch
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-report
+          publish_dir: allure-report
+
+      - name: Send Slack notification
+        if: always()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": "*Playwright Test Results*\nStatus: ${{ job.status }}\nBrowser: ${{ matrix.browser }}\nReport: https://${{ github.repository_owner }}.github.io/${{ github.repository }}/"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
