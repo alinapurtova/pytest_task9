@@ -1,0 +1,78 @@
+import allure
+from utils.data_generator import random_name, random_email, random_text
+
+product_name = "Blue Top"
+
+
+@allure.feature("Products")
+@allure.story("Test Case 8: Verify All Products and product detail page")
+def test_products_and_details(page_objects):
+    home = page_objects.home
+    products = page_objects.products
+    product_details = page_objects.product_details
+
+    home.go_to_products()
+    products.verify_products_page()
+    products.view_first_product()
+    product_details.verify_on_product_page(1)
+    product_details.verify_product_details()
+
+
+@allure.feature("Products")
+@allure.story("Test Case 9: Search Product")
+def test_search_product(page_objects):
+    home = page_objects.home
+    products = page_objects.products
+
+    home.go_to_products()
+    products.verify_products_page()
+    products.search_product(product_name)
+    products.verify_searched_title_visible()
+    products.verify_searched_products_visible()
+    products.verify_searched_products_contains_keyword(product_name)
+
+
+@allure.feature("Products")
+@allure.story("Test Case 18: View Category Products")
+def test_view_category_products(page_objects):
+    home = page_objects.home
+    products = page_objects.products
+
+    home.go_to_products()
+    products.verify_categories_visible()
+
+    products.open_category(
+        products.women_category,
+        products.women_dress_subcategory,
+        "Women - Dress"
+    )
+    products.verify_category_title_contains(products.expected_women_title)
+
+    products.open_category(
+        products.men_category,
+        products.men_tshirts_subcategory,
+        "Men - Tshirts"
+    )
+    products.verify_category_title_contains(products.expected_men_title)
+
+
+@allure.feature("Products")
+@allure.story("Test Case 21: Add review on product")
+def test_add_review(page_objects):
+    home = page_objects.home
+    products = page_objects.products
+    product_details = page_objects.product_details
+
+    home.go_to_products()
+    products.verify_products_page()
+    products.view_first_product()
+
+    product_details.verify_review_section_visible()
+
+    name = random_name()
+    email = random_email()
+    review = random_text()
+
+    product_details.fill_review_form(name, email, review)
+    product_details.submit_review()
+    product_details.verify_review_success_message()
