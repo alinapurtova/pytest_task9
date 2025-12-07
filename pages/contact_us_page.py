@@ -18,7 +18,7 @@ class ContactUsPage(BasePage):
     success_text = "Success! Your details have been submitted successfully."
 
     def verify_get_in_touch_visible(self):
-        assert self.is_visible(self.get_in_touch_title, "'GET IN TOUCH' title")
+        self.is_visible(self.get_in_touch_title, "'GET IN TOUCH' title")
 
     def fill_contact_form(self, name: str, email: str, subject: str, message: str):
         self.fill(self.name_input, name, "Name")
@@ -35,15 +35,14 @@ class ContactUsPage(BasePage):
         locator.set_input_files(filepath)
 
     def submit_form(self):
-        self.click(self.submit_btn, "Submit")
         self.page.on("dialog", lambda dialog: dialog.accept())
         self.click(self.submit_btn, "Submit")
 
     def verify_success_message(self):
         with allure.step("Verify success message is visible"):
-            msg = self.page.locator(self.success_msg)
+            msg = self.find(self.success_msg)
             expect(msg).to_be_visible()
-            assert self.success_text in msg.inner_text()
+            expect(msg).to_contain_text(self.success_text)
 
     def click_home_button(self):
         self.click(self.home_btn, "Home")

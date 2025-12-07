@@ -1,3 +1,5 @@
+from playwright.sync_api import expect
+
 from utils.data_generator import random_name, random_email, random_word, random_text
 import allure
 
@@ -19,6 +21,7 @@ def test_contact_us_form(page_objects):
     contact.fill_contact_form(name, email, subject, message)
     contact.upload_file("test_file.txt")
     contact.submit_form()
+    expect(contact.find(contact.success_msg)).to_be_visible()
     contact.verify_success_message()
     contact.click_home_button()
     home.verify_home_title()

@@ -11,6 +11,7 @@ class HomePage(BasePage):
     subscription_title = "//h2[text()='Subscription']"
     scroll_up_btn = "#scrollUp"
     main_heading_text = "div.item.active > div:nth-child(1) > h2"
+    footer = "#footer"
     home_title = "Automation Exercise"
 
     def open_home(self):
@@ -43,7 +44,7 @@ class HomePage(BasePage):
         self.click(self.scroll_up_btn, "Scroll Up Arrow")
 
     def verify_subscription_visible(self):
-        assert self.is_visible(self.subscription_title, "Subscription title")
+        self.is_visible(self.subscription_title, "Subscription title")
 
     def verify_main_heading_visible(self):
-        assert self.is_visible(self.main_heading_text, "Main heading")
+        self.is_visible(self.main_heading_text, "Main heading")

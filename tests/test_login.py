@@ -1,4 +1,6 @@
 import allure
+from playwright.sync_api import expect
+
 from utils.data_generator import random_email, random_password
 
 
@@ -15,4 +17,5 @@ def test_login_incorrect(page_objects):
     password = random_password()
 
     login.login(email, password)
+    expect(login.find(login.error_message)).to_be_visible()
     login.verify_error_message()

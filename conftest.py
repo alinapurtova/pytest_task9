@@ -21,11 +21,11 @@ def new_page(playwright: Playwright, request) -> Page:
     context = browser.new_context(viewport={"width": 1920, "height": 1080})
     page = context.new_page()
     page.set_default_timeout(10000)
-
-    yield page
-
-    context.close()
-    browser.close()
+    try:
+        yield page
+    finally:
+        context.close()
+        browser.close()
 
 
 class PageObjects:

@@ -23,7 +23,7 @@ class ProductDetailsPage(BasePage):
 
     def verify_product_details(self):
         for locator in [self.name, self.category, self.price, self.availability, self.condition, self.brand]:
-            assert self.is_visible(locator, "Product detail")
+            self.is_visible(locator, "Product detail")
 
     def increase_quantity(self, qty: int):
         super().increase_quantity(self.quantity_input, qty)
@@ -32,10 +32,10 @@ class ProductDetailsPage(BasePage):
         self.click(self.add_to_cart_btn, "Add to Cart")
 
     def click_view_cart(self):
-        super().click_element(self.view_cart_btn, "View Cart")
+        self.click(self.view_cart_btn, "View Cart")
 
     def verify_review_section_visible(self):
-        expect(self.page.locator(self.write_review_title)).to_be_visible()
+        self.is_visible(self.write_review_title, "Review Section Title")
 
     def fill_review_form(self, name: str, email: str, review: str):
         self.fill(self.name_input, name, "Review Name")
@@ -46,9 +46,9 @@ class ProductDetailsPage(BasePage):
         self.click(self.submit_review_btn, "Submit Review")
 
     def verify_review_success_message(self):
-        expect(self.page.locator(self.success_message)).to_be_visible()
+        self.is_visible(self.success_message, "Review Success Message")
 
     def verify_on_product_page(self, product_id: int = 1):
         expected_url = f"{self.base_url}/product_details/{product_id}"
         with allure.step(f"Verify current URL is '{expected_url}'"):
-            assert self.page.url == expected_url, f"Expected URL: {expected_url}, but got: {self.page.url}"
+            expect(self.page).to_have_url(expected_url)

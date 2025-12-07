@@ -15,3 +15,16 @@ faker = "*"
 
 [requires]
 python_version = "3.11"
+
+[scripts]
+test-chromium = "pytest --browser_name=chromium --alluredir=allure-results"
+test-firefox = "pytest --browser_name=firefox --alluredir=allure-results"
+test-parallel = "pytest -n 2 --browser_name=chromium --alluredir=allure-results"
+test-products = "pytest tests/test_products.py --browser_name=chromium --alluredir=allure-results"
+test-contact = "pytest tests/test_contact_us.py --browser_name=chromium --alluredir=allure-results"
+test-cart = "pytest tests/test_cart.py --browser_name=chromium --alluredir=allure-results"
+test-login = 'pytest tests/test_login.py --browser_name=chromium --alluredir=allure-results'
+test-scroll = 'pytest tests/test_home.py --browser_name=chromium --alluredir=allure-results'
+allure-generate = "allure generate allure-results --clean -o allure-report"
+allure-open = "allure open allure-report"
+

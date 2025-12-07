@@ -39,16 +39,30 @@ pipenv run playwright install
 pipenv run pytest --browser_name=chromium --alluredir=allure-results
 pipenv run pytest --browser_name=firefox --alluredir=allure-results
 ```
+or by scripts:
+```bash
+pipenv run test-chromium
+pipenv run test-firefox
+```
 
 **Run tests in parallel (example with pytest-xdist, 2 workers):**
 ```bash
 pipenv run pytest -n 2 --browser_name=chromium --alluredir=allure-results
+```
+or script:
+```bash
+pipenv run test-parallel
 ```
 
 **Run specific test files:**
 ```bash
 pipenv run pytest tests/test_products.py
 ```
+or script:
+```bash
+pipenv run test-products
+```
+You can find other scripts in **Pipfile**.
 
 ## Generate Allure Report
 
@@ -56,15 +70,18 @@ pipenv run pytest tests/test_products.py
 ```bash
 pipenv run allure generate allure-results --clean -o allure-report
 ```
+or
+```bash
+pipenv run allure-generate
+```
 
 **Open report locally:**
 ```bash
 pipenv run allure open allure-report
 ```
-
-**Run specific test files:**
+or
 ```bash
-pipenv run pytest tests/test_products.py
+pipenv run allure-open
 ```
 
 ## Test Summary
