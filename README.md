@@ -123,4 +123,4 @@ pipenv run allure-open
 
 ## CI/CD 
 Tests are executed automatically via GitHub Actions with results reported to the branch allure-report and uploaded to Pages.
-Also pipeline sends Slack notifications with test results and report link.
+Also pipeline sends Slack notifications to channel with test results and report link.
